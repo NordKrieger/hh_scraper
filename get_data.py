@@ -36,10 +36,13 @@ def get_offers_links(html):
 
 
 # get all vacancies links on search request
-def get_all_links(query, area):
+def get_all_links(query, area=-1):
   url_base = 'https://hh.ru/search/vacancy'
   url_text = '?text=' + '+'.join(query)
-  url_area = '&area=' + str(area)
+  if area == -1:
+      url_area = ''
+  else:
+      url_area = '&area=' + str(area)
   url_page = '&page='
 
   page_is_not_empty = True
@@ -135,8 +138,9 @@ def parsing(links):
   return data
 
 if __name__ == "__main__":
-  query = ['analyst', 'python']
-  links = get_all_links(query, 1)
-  data = parsing(links)
-  data.to_csv('vacancy_data_' + '_'.join(query) + '_' + date.today().strftime('%d%m%Y') + '.csv')
-  print('Checked', len(links), 'job vacancies.')
+    query = ['analyst', 'python']
+    area = 1 # Moscow
+    links = get_all_links(query, area)
+    data = parsing(links)
+    data.to_csv('vacancy_data_' + '_'.join(query) + '_' + date.today().strftime('%d%m%Y') + '.csv')
+    print('Checked', len(links), 'job vacancies.')
